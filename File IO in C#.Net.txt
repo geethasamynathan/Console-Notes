@@ -1,0 +1,190 @@
+File IO in C#.Net :
+=============
+
+A file is a collection of data stored in a disk with a specific name and a directory path. When a file is opened for reading or writing, it becomes a stream.
+
+The stream is basically the sequence of bytes passing through the communication path. There are two main streams: the input stream and the output stream. The input stream is used for reading data from file (read operation) and the output stream is used for writing into the file (write operation).
+
+C# I/O Classes
+The System.IO namespace has various class that are used for performing various operation with files, like creating and deleting files, reading from or writing to a file, closing a file etc.
+
+
+class Program
+    {
+  static void Main(string[] args)
+        {
+ 	string path = "G:\\IBM\\test.txt";
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            using (FileStream fs = File.Create(path))
+            {
+                AddTextintheFile(fs, "Hello");
+                AddTextintheFile(fs, "Welcome to .NET Training");
+                AddTextintheFile(fs, "\r\n sample text for Filestream");
+               
+            }
+            using(FileStream fs =File.OpenRead(path))
+            {
+                byte[] b = new byte[1024];
+                UTF8Encoding encode = new UTF8Encoding(true);
+                fs.Read(b, 0, b.Length);
+                Console.WriteLine(encode.GetString(b));
+
+            }
+            Console.ReadLine();
+        }
+        public static void AddTextintheFile(FileStream fs, string input)
+        {
+            byte[] byteinfo = new UTF8Encoding(true).GetBytes(input);
+            fs.Write(byteinfo, 0, byteinfo.Length);
+        }
+=================================================================================
+
+//Directory Info
+===================
+
+ class Program
+
+    {
+
+        static void Main(string[] args)
+        {
+            //Specify the directory which we want to manipulate
+            string sourcedir = @"D:\SampleSource";
+            string targetdir = @"D:\SampleDestination";
+
+            DirectoryInfo sdi = new DirectoryInfo(sourcedir);
+            DirectoryInfo tdi = new DirectoryInfo(targetdir);
+            // Check if target directory exists, if not, create it
+
+            if (!tdi.Exists)
+            {
+                tdi.Create();
+            }
+
+            // Copy each file into it's new directory.
+
+            foreach (FileInfo fi in sdi.GetFiles())
+            {
+                fi.CopyTo(Path.Combine(tdi.ToString(), fi.Name), true);
+                Console.WriteLine(@"Copying {0}\{1}", tdi.FullName, fi.Name);
+            } 
+
+            // Copy each subdirectory and it's files
+
+            foreach (DirectoryInfo sourceSubDir in sdi.GetDirectories())
+            {
+                DirectoryInfo targetSubDir =tdi.CreateSubdirectory(sourceSubDir.Name);
+
+                // Copy each file into it's new directory.
+                foreach (FileInfo fi in sourceSubDir.GetFiles())
+                {
+                    fi.CopyTo(Path.Combine(targetSubDir.ToString(), fi.Name), true);
+                    Console.WriteLine(@"Copying {0}\{1}", targetSubDir.FullName, fi.Name);
+                }
+
+            }
+
+ 
+
+            Console.ReadLine();
+
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   class Program
+    {
+        static void Main(string[] args)
+        {
+            int choice, flag;
+
+           do
+            {
+                Console.WriteLine("------------------------------------");
+                Console.WriteLine("   File Handling Operations   ");
+                Console.WriteLine("------------------------------------");
+                Console.WriteLine("\t 1. Create");
+                Console.WriteLine("\t 2. Write");
+                Console.WriteLine("\t 3. Append");
+                Console.WriteLine("\t 4. Delete");
+                Console.Write("\nChoose Your Option:\t");
+                choice = int.Parse(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        File.Create(@"D:\sample.txt");
+                        break;
+                    case 2:
+                        string cont;
+                        Console.WriteLine("Enter the contents to 			write: ");
+                        cont = Console.ReadLine();
+                        File.WriteAllText(@"D:\sample.txt", cont);
+                        Console.WriteLine("\nFile Contents: ");
+                        Console.WriteLine(File.ReadAllText(@"D:\sample.txt"));
+                        break;
+                    case 3:
+                        Console.WriteLine("Enter the contents to append: ");
+                        cont = Console.ReadLine();
+                        File.AppendAllText(@"D:\sample.txt", cont);
+                        Console.WriteLine("\nFile Contents: ");
+                        Console.WriteLine(File.ReadAllText(@"D:\sample.txt"));
+                        break;
+                    case 4:
+                        File.Delete(@"D:\sample.txt");
+                        break;
+                    default:
+                        Console.WriteLine("Choose the correct option: ");
+                        break;
+                }
+                Console.Write("Enter 0 to Continue: ");
+                flag = int.Parse(Console.ReadLine());
+            
+           
+         } while (flag == 0);
+   
+            Console.ReadKey();
+        }
+    }
+================================================================
+ class two
+    {
+        static void Main()
+        {
+            string[] x = new string[] { "Thamarai", "Subbulakshmi", "Beena", "we" };
+            File.WriteAllLines(@"D:\one.txt", x);
+            File.AppendAllLines(@"D:\sample.txt",x);
+            File.WriteAllText(@"D:\sa.txt", "Welcome to file concept");
+
+        }
+    }
+----------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
